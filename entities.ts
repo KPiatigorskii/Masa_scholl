@@ -2,13 +2,15 @@ export type Teacher = {
     firstName: string;
     lastName: string;
     professions: string[];
+    fullName: () => string;
 };
 
 export type Student = {
     firstName: string;
     lastName: string;
     birthDate: Date;
-    age: () => number
+    age: () => number;
+    fullName: () => string;
 };
 
 export type Classroom = {

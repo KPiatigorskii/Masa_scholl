@@ -1,10 +1,19 @@
+import * as _ from "underscore";
+
+import { firstNames, lastNames } from "./constants";
+
 export function getRandomValueFromArray(array: string[]): string {
     return array[Math.floor(Math.random() * array.length)];
 }
 
 export function getRandomBirthDate(): Date {
-    const year: number = 2011 - (Math.floor(Math.random() + 3));
-    const month: number = Math.floor(Math.random() + 12);
-    const day: number = Math.floor(Math.random() + 29);
+    const year: number = _.random(2011,2014);
+    const month: number = _.random(1,12);
+    const daysInMonth: number =new  Date(year, month, 0).getDate(); // get count of current choose month
+    const day: number = _.random(1,daysInMonth)
     return new Date(year, month, day);
+}
+
+export function fullName(firstName: string, lastName: string): string {
+    return `${firstName} ${lastName}`
 }

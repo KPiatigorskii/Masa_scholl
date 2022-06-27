@@ -5,4 +5,5 @@ const school: School = initializeSchool();
 
 printSchool(school);
 
+console.log("Yongest:")
 console.log(getClassYoungestStudentFullName(school.classes[0]));

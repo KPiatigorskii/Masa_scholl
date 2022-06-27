@@ -3,7 +3,7 @@
 
 import { firstNames, Geography, lastNames, Mathematics } from "./constants";
 import { Classroom, School, Student, Teacher } from "./entities";
-import { getRandomBirthDate, getRandomValueFromArray } from "./helpers";
+import { getRandomBirthDate, getRandomValueFromArray, fullName } from "./helpers";
 
 export function initializeSchool(): School {
     const student1: Student = createStudent(getRandomValueFromArray(firstNames), getRandomValueFromArray(lastNames), getRandomBirthDate());
@@ -38,7 +38,8 @@ function createTeacher(firstName: string, lastName: string, professions: string[
     return {
         firstName: firstName,
         lastName: lastName,
-        professions: professions
+        professions: professions,
+        fullName: () => `${firstName} ${lastName}`
     };
 }
 
@@ -47,8 +48,13 @@ function createStudent(firstName: string, lastName: string, birthDate: Date): St
         firstName: firstName,
         lastName: lastName,
         birthDate: birthDate,
-        age: () => { 
-            return 0;
+        age: () =>{
+            const ageDiffferenceMilliseconds: number = Date.now() - birthDate.getTime();
+            const ageDate: Date = new Date(ageDiffferenceMilliseconds)
+            return Math.abs(ageDate.getUTCFullYear() - 1970)
+        },
+        fullName: () => {
+            return `${firstName} ${lastName}`
         }
     };
 }
@@ -61,8 +67,9 @@ function createClassroom(name: string, teacher: Teacher, students: Student[]): C
     };
 }
 
-export function getClassYoungestStudent(classroom: Classroom): string {
-    return classroom.students[10].firstName;
+export function getClassYoungestStudent(classroom: Classroom) {
+    return classroom.students.sort((student, next_student) => 
+        student.birthDate < next_student.birthDate? -1 : 1)[0];
 }
 
 export function printSchool(school: School): void {
@@ -71,4 +78,15 @@ export function printSchool(school: School): void {
     console.log(school.name);
     console.log(school.address);
     console.log(school.phone);
+    console.log("Classes:");
+    console.log("============");   
+    for (const [index, classValue] of school.classes.entries()){
+        console.log(`Class ${index}: ${classValue.name}`);
+        console.log(`Teacher: ${classValue.teacher.fullName()}`);
+        for (const [index, student] of classValue.students.entries()){
+            console.log(`${index}: ${student.fullName()}: ${student.age()} : ${student.birthDate}`)
+        }
+        console.log("============"); 
+    };
+
 }
