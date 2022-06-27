@@ -1,4 +1,5 @@
 import * as _ from "underscore";
+import * as falso from "@ngneat/falso"
 
 import { firstNames, Geography, Mathematics, lastNames, professions } from "./constants";
 import { getRandomBirthDate, getRandomValueFromArray } from "./helpers";
@@ -52,8 +53,9 @@ export class Classroom {
     };
 
     getClassYoungestStudentFullName(): string {
-        return this.students.sort((student, next_student) => 
-            student.birthDate < next_student.birthDate? -1 : 1)[0].fullName;
+        let studentsArray: Student[] = Object.assign(this.students)
+        return studentsArray.sort((currentStudent: Student, nextStudent: Student) => 
+            nextStudent.birthDate.getTime() - currentStudent.birthDate.getTime())[0].fullName;
     };
 
     static transferStudent(fullName: string, fromClassroom: Classroom, toClassrom: Classroom): void {
@@ -84,21 +86,23 @@ export class School {
         this.classes = classes;
     }
 
-    printSchool(school: School): void {
+    printSchool(): void {
+        let schoolObject: School = Object.assign(this)
         console.log("School data:");
         console.log("============");
-        console.log(school.name);
-        console.log(school.address);
-        console.log(school.phone);
+        console.log(schoolObject.name);
+        console.log(schoolObject.address);
+        console.log(schoolObject.phone);
         console.log("Classes:");
-        console.log("============");   
-        for (const [index, classValue] of school.classes.entries()){
-            console.log(`Class ${index}: ${classValue.name}`);
-            console.log(`Teacher: ${classValue.teacher.fullName}`);
-            classValue.students.sort((student, next_student) => student.lastName > next_student.lastName? -1 : 1)
-                .sort((student, next_student) => student.firstName > next_student.firstName? -1 : 1);
+        console.log("============");
+        schoolObject.classes.sort((currentClass, nextClass) => currentClass.name > nextClass.name ? 1 : -1)   
+        for (const [index, classValue] of schoolObject.classes.entries()){
+            console.log(`Class ${index+1}: ${classValue.name}`);
+            console.log(`Teacher: ${classValue.teacher.fullName} ${classValue.teacher.professions}`);
+            classValue.students.sort((currentStudent, nextStudent) => currentStudent.lastName > nextStudent.lastName? 1 : -1)
+                .sort((currentStudent, nextStudent) => currentStudent.firstName > nextStudent.firstName? 1 : -1);
             for (const [index, student] of classValue.students.entries()){
-                console.log(`${index}: ${student.fullName}: ${student.age}`);
+                console.log(`${index+1}: ${student.fullName}: ${student.age}`);
             };
             console.log("============"); 
         };
@@ -107,20 +111,21 @@ export class School {
     static generateSchool(numberOfClasses: number) : School {
         const classes : Classroom[] = [];
         for (let index = 0; index < numberOfClasses; index++) {
-            let studentCount = _.random(1,5);
+            let studentCount = _.random(5,8);
             let teacherProfessionsCount = _.random(1,3); //for example 1 teacher can have maximum 3 professions
             let teacherProfessions: string[] = [];
+            let shuffleIndexes: number[] = _.shuffle(_.range(0,professions.length-1)) // shuffle all professions for make them unique in array
             for (let index = 0; index < teacherProfessionsCount; index++) {
-                teacherProfessions.push(professions[_.random(professions.length-1)])
+                teacherProfessions.push(professions[shuffleIndexes[index]])
             }
-            let teacher: Teacher = new Teacher(getRandomValueFromArray(firstNames), getRandomValueFromArray(lastNames), teacherProfessions);
+            let teacher: Teacher = new Teacher(falso.randFirstName(), falso.randLastName(), teacherProfessions);
             let students : Student[] = [];
             for (let index = 0; index < studentCount; index++) {
-                students.push(new Student(getRandomValueFromArray(firstNames), getRandomValueFromArray(lastNames), getRandomBirthDate()))
+                students.push(new Student(falso.randFirstName(), falso.randLastName(), getRandomBirthDate()))
             };
             classes.push(new Classroom(teacherProfessions[_.random(teacherProfessions.length-1)], teacher, students));
         };
-        return new School("Big school", "Moscow", "+7 (916) 000 12 21", classes);
+        return new School(falso.randAmericanFootballTeam(), falso.randCity(), falso.randPhoneNumber(), classes);
     };
 
     static initializeSchool(): School {
