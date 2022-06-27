@@ -1,6 +1,8 @@
 import * as _ from "underscore";
+import * as faker from "@faker-js/faker/locale/en_US"
 
 import { firstNames, lastNames } from "./constants";
+import { Faker } from "@faker-js/faker";
 
 export function getRandomValueFromArray(array: string[]): string {
     return array[Math.floor(Math.random() * array.length)];

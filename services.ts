@@ -1,9 +1,34 @@
 // Ideas:
 // Build dynamically created classmates: collection of first names, collection of lastnames, randomly pick birth date
+import * as _ from "underscore";
 
-import { firstNames, Geography, lastNames, Mathematics } from "./constants";
+import { firstNames, Geography, lastNames, Mathematics, professions } from "./constants";
 import { Classroom, School, Student, Teacher } from "./entities";
-import { getRandomBirthDate, getRandomValueFromArray, fullName } from "./helpers";
+import { getRandomBirthDate, getRandomValueFromArray } from "./helpers";
+
+export function generateSchool(numberOfClasses: number) : School {
+    const classes : Classroom[] = [];
+    for (let index = 0; index < numberOfClasses; index++) {
+        let studentCount = _.random(1,5)
+        let teacherProfessionsCount = _.random(1,3) //for example 1 teacher can have only 3 professions
+        let teacherProfessions: string[] = []
+        for (let index = 0; index < teacherProfessionsCount; index++) {
+            teacherProfessions.push(professions[_.random(professions.length-1)])
+        }
+        let teacher: Teacher = createTeacher(getRandomValueFromArray(firstNames), getRandomValueFromArray(lastNames), teacherProfessions);
+        let students : Student[] = [];
+        for (let index = 0; index < studentCount; index++) {
+            students.push(createStudent(getRandomValueFromArray(firstNames), getRandomValueFromArray(lastNames), getRandomBirthDate()))
+        };
+        classes.push(createClassroom(teacherProfessions[_.random(teacherProfessions.length-1)], teacher, students));
+    }
+    return {
+        name: "Big school",
+        address: "Moscow",
+        phone: "+7 (916) 000 12 21",
+        classes: classes
+    }
+}
 
 export function initializeSchool(): School {
     const student1: Student = createStudent(getRandomValueFromArray(firstNames), getRandomValueFromArray(lastNames), getRandomBirthDate());

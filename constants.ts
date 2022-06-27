@@ -5,6 +5,15 @@ export const History: string = "History";
 export const Chemistry: string = "Chemistry";
 export const Physics: string = "Physics";
 
+export const professions: string[] = [
+    Mathematics,
+    Hebrew,
+    Geography,
+    History,
+    Chemistry,
+    Physics
+]
+
 export const firstNames: string[] = [
     "Ivan",
     "Peter",
