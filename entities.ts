@@ -84,7 +84,7 @@ export class School {
         this.address = address;
         this.phone = phone;
         this.classes = classes;
-    }
+    };
 
     printSchool(): void {
         let schoolObject: School = Object.assign(this)
@@ -121,7 +121,7 @@ export class School {
             let teacher: Teacher = new Teacher(falso.randFirstName(), falso.randLastName(), teacherProfessions);
             let students : Student[] = [];
             for (let index = 0; index < studentCount; index++) {
-                students.push(new Student(falso.randFirstName(), falso.randLastName(), getRandomBirthDate()))
+                students.push(new Student(falso.randFirstName(), falso.randLastName(), getRandomBirthDate()));
             };
             classes.push(new Classroom(teacherProfessions[_.random(teacherProfessions.length-1)], teacher, students));
         };
@@ -147,5 +147,5 @@ export class School {
         const geographyClass: Classroom = new Classroom("Geography", teacher1, [student5, student6, student7, student8]);
     
         return new School("Big school","Moscow","+7 (916) 000 12 21",[ mathClass, geographyClass ]);
-    }
+    };
 };

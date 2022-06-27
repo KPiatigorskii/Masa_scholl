@@ -1,7 +1,7 @@
 export const Mathematics: string = "Mathematics";
 export const Hebrew: string = "Hebrew";
 export const Geography: string = "Geography";
-export const History: string = "History"; // Ex2 answer: need to define const as "export const" and import on another file
+export const History: string = "History"; // Ex2 answer: need to define const as "export const", uncomment and import on another file
 export const Chemistry: string = "Chemistry";
 export const Physics: string = "Physics";
 
