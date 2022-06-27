@@ -67,12 +67,17 @@ function createClassroom(name: string, teacher: Teacher, students: Student[]): C
     };
 }
 
-export function getClassYoungestStudent(classroom: Classroom) {
+export function getClassYoungestStudent(classroom: Classroom): string {
     return classroom.students.sort((student, next_student) => 
-        student.birthDate < next_student.birthDate? -1 : 1)[0];
+        student.birthDate < next_student.birthDate? -1 : 1)[0].fullName();
 }
 
-export function printSchool(school: School): void {
+function sortStudentsByLastNameAndFirstName(students:Student[]): void {
+    students.sort((student, next_student) => student.lastName > next_student.lastName? -1 : 1)
+        .sort((student, next_student) => student.firstName > next_student.firstName? -1 : 1)
+}
+
+export function printSchool(school: School, ): void {
     console.log("School data:");
     console.log("============");
     console.log(school.name);
@@ -83,10 +88,25 @@ export function printSchool(school: School): void {
     for (const [index, classValue] of school.classes.entries()){
         console.log(`Class ${index}: ${classValue.name}`);
         console.log(`Teacher: ${classValue.teacher.fullName()}`);
+        sortStudentsByLastNameAndFirstName(classValue.students)
         for (const [index, student] of classValue.students.entries()){
-            console.log(`${index}: ${student.fullName()}: ${student.age()} : ${student.birthDate}`)
+            console.log(`${index}: ${student.fullName()}: ${student.age()}`)
         }
         console.log("============"); 
     };
 
+}
+
+export function transferStudent(fullName: string, fromClassroom: Classroom, toClassrom: Classroom): void {
+    const studentsMatchArray: Student[] = fromClassroom.students.filter((student) => student.fullName() == fullName)
+    if (studentsMatchArray.length > 1){
+        console.error(`class have more than one students called ${fullName}`);
+    }
+    else if (studentsMatchArray.length < 1) {
+        console.error(`student "${fullName}" not found`);
+    }
+    else {
+        fromClassroom.students.splice(fromClassroom.students.findIndex(student => student.fullName() == fullName),1);
+        toClassrom.students.push(studentsMatchArray[0])
+    }
 }
