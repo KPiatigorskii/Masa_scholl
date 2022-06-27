@@ -1,15 +1,9 @@
-import { School } from "./entities";
-import { getClassYoungestStudent as getClassYoungestStudentFullName, initializeSchool, printSchool, transferStudent, generateSchool} from "./services";
+import { School, Classroom } from "./entities";
 
-// const school: School = initializeSchool();
-
-// printSchool(school);
-// transferStudent(getClassYoungestStudentFullName(school.classes[0]), school.classes[0], school.classes[1]);
-// printSchool(school);
-const school: School = generateSchool(3)
-printSchool(school);
-// console.log("Yongest:")
-// console.log(getClassYoungestStudentFullName(school.classes[0]));
-transferStudent(getClassYoungestStudentFullName(school.classes[0]), school.classes[0], school.classes[1]);
-printSchool(school)
+//const school: School = School.initializeSchool();
+const school: School = School.generateSchool(3);
+school.printSchool(school);
+console.log(school.classes[0].getClassYoungestStudentFullName());
+Classroom.transferStudent(school.classes[0].getClassYoungestStudentFullName(), school.classes[1], school.classes[0]);
+school.printSchool(school);
 
